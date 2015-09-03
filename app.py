@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect
-import appLogic
+#import appLogic
 
 app = Flask(__name__)
 app.symbol = "NONE"

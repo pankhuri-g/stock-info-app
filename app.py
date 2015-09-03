@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect
+import appLogic
 
 app = Flask(__name__)
 app.symbol = "NONE"
@@ -16,7 +17,7 @@ def index():
 @app.route('/graph',methods=['POST'])
 def graph():
   app.symbol=request.form['symbol']                                                                                             
-  return render_template('graph.html',ticker=app.symbol)
+  return render_template('graph.html',ticker=app.symbol, mydata=appLogic.build_graph(app.symbol))
 
 if __name__ == '__main__':
   app.run(port=33507)

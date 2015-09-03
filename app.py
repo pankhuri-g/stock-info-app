@@ -12,9 +12,11 @@ def main():
 def index():
   if request.method == 'GET':
      return render_template('index.html')
-  else:
-     app.symbol=request.form['symbol']
-     return render_template('graph.html',ticker=app.symbol)
+
+@app.route('/graph',methods=['POST'])
+def graph():
+  app.symbol=request.form['symbol']                                                                                             
+  return render_template('graph.html',ticker=app.symbol)
 
 if __name__ == '__main__':
   app.run(port=33507)

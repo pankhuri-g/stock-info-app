@@ -3,9 +3,11 @@ from bokeh.plotting import figure
 from bokeh.resources import CDN
 from bokeh.embed import file_html
 
+"""
 plot = figure()
 plot.circle([1,2], [3,4])
 html = file_html(plot, CDN, "my plot")
+"""
 
 app = Flask(__name__)
 app.symbol = "NONE"
@@ -23,8 +25,8 @@ def index():
 @app.route('/graph',methods=['POST'])
 def graph():
     app.symbol=request.form['symbol']       
-    #return render_template('graph.html',ticker=app.symbol, mydata=5)#appLogic.build_graph(app.symbol))
-    return render_template(html)    
+    return render_template('graph.html',ticker=app.symbol, mydata=5)#appLogic.build_graph(app.symbol))
+    #return render_template(html)    
 
 
 if __name__ == '__main__':

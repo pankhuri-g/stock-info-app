@@ -2,12 +2,11 @@ from flask import Flask, render_template, request, redirect
 from bokeh.plotting import figure
 from bokeh.resources import CDN
 from bokeh.embed import file_html
+from bokeh.util.string import encode_utf8
 
-"""
 plot = figure()
 plot.circle([1,2], [3,4])
 html = file_html(plot, CDN, "my plot")
-"""
 
 app = Flask(__name__)
 app.symbol = "NONE"

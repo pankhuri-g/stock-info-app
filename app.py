@@ -17,7 +17,7 @@ def index():
 @app.route('/graph',methods=['POST'])
 def graph():
   app.symbol=request.form['symbol']                                                                                             
-  return render_template('graph.html',ticker=app.symbol, mydata=appLogic.build_graph(app.symbol))
+  return render_template('graph.html',ticker=app.symbol, mydata=5)#appLogic.build_graph(app.symbol))
 
 if __name__ == '__main__':
   app.run(port=33507)

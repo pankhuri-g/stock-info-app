@@ -4,13 +4,19 @@ from bokeh.resources import CDN
 from bokeh.embed import file_html
 from bokeh.util.string import encode_utf8
 
+"""
 plot = figure()
 plot.circle([1,2], [3,4])
 html = file_html(plot, CDN, "my plot")
+"""
 
 app = Flask(__name__)
 app.symbol = "NONE"
 
+plot = figure(x_axis_type = "datetime")
+plot.line(x=[1, 2, 3, 4, 5], y=[6, 7, 2, 4, 5])
+plot.title = "Stock Closing Prices"
+html = file_html(plot, CDN, "my plot")
 
 @app.route('/')
 def main():

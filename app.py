@@ -22,7 +22,7 @@ def build_graph(ticker):
 
   #use lists generated as x and y axes
   plot = figure(x_axis_type = "datetime")
-  plot.line(stock_date, stock_value, legend=ticker.upper()+': Close')
+  plot.line(stock_date, stock_value, legend = ticker.upper()+': Close')
   plot.title = ticker.upper() + ": Aug-2015 Data from Quandl WIKI"
   plot.xaxis.axis_label = 'Date'
   plot.yaxis.axis_label = 'Price'
@@ -41,10 +41,13 @@ def index():
 
 @app.route('/graph',methods=['POST'])
 def graph():
-    app.symbol=request.form['symbol']       
-    graph_html = build_graph(str(app.symbol))
-    return encode_utf8(graph_html)   
- 
+    app.symbol = request.form['symbol']
+    try:       
+      graph_html = build_graph(str(app.symbol))
+      return encode_utf8(graph_html)   
+    except KeyError:
+      return render_template('error.html')
+      
 
 if __name__ == '__main__':
   app.run(port=33507)

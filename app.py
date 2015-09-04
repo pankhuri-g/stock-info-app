@@ -3,41 +3,30 @@ from bokeh.plotting import figure
 from bokeh.resources import CDN
 from bokeh.embed import file_html
 from bokeh.util.string import encode_utf8
-
-
 import requests                                                                                                                    
-import pandas                                                                                                                      
+#import pandas                                                                                                                     
 import simplejson                                                                                                                  
-#from collections import OrderedDict                                                                                               
 from datetime import datetime                                                                                                      
-                                                                                                                                   
-url = 'https://www.quandl.com/api/v3/datasets/WIKI/AAPL.json?column_index=4&start_date=2015-08-01&end_date=2015-08-31&order=asc' 
-data = requests.get(url).text                                                                                                    
-data = simplejson.loads(data)                                                                                                    
-stock_data=data['dataset']['data']                                                                                               
-  #print type(stock_data[0][1])                                                                                                    
-  #stock_dict = OrderedDict()                                                                                                      
-  #stock_dict = dict(stock_data)                                                                                                   
-  #print type(stock_dict)                                                                                                          
-  #print (stock_dict)                                                                                                              
-  #return float(mydata.ix[2,'Close'])                                                                                              
-stock_value = [member[1] for member in stock_data]                                                                               
-stock_date = [datetime.strptime(str(member[0]), '%Y-%m-%d') for member in stock_data] 
+                                                
+app = Flask(__name__)                                                                                                              
+app.symbol = "NONE" 
 
-"""
-plot = figure()
-plot.circle([1,2], [3,4])
-html = file_html(plot, CDN, "my plot")
-"""
+def build_graph(ticker):                                                                                   
+  url = 'https://www.quandl.com/api/v3/datasets/WIKI/'+ticker.upper()+'.json?column_index=4&start_date=2015-08-01&end_date=2015-08-31&order=asc' 
+  data = requests.get(url).text                                                                                                    
+  data = simplejson.loads(data)
 
-app = Flask(__name__)
-app.symbol = "NONE"
+  #pick out useful list from json                                                                                                 
+  stock_data = data['dataset']['data']
+  stock_value = [ member[1] for member in stock_data ]                                                                        
+  stock_date = [ datetime.strptime(str(member[0]), '%Y-%m-%d') for member in stock_data ] 
 
-plot = figure(x_axis_type = "datetime")
-#plot.line(x=[1, 2, 3, 4, 5], y=[6, 7, 2, 4, 5])
-plot.line(stock_date, stock_value)
-plot.title = "Stock Closing Prices"
-html = file_html(plot, CDN, "my plot")
+  #use lists generated as x and y axes
+  plot = figure(x_axis_type = "datetime")
+  plot.line(stock_date, stock_value)
+  plot.title = "Stock Closing Prices-"+ticker.upper()
+  html = file_html(plot, CDN, ticker.upper()+" Closing Price plot")
+  return html
 
 @app.route('/')
 def main():
@@ -52,8 +41,9 @@ def index():
 def graph():
     app.symbol=request.form['symbol']       
     #return render_template('graph.html',ticker=app.symbol, mydata=5)#appLogic.build_graph(app.symbol))
+    graph_html = build_graph(str(app.symbol))
     return encode_utf8(html)   
-
+ 
 
 if __name__ == '__main__':
   app.run(port=33507)

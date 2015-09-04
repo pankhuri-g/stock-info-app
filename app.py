@@ -42,7 +42,7 @@ def graph():
     app.symbol=request.form['symbol']       
     #return render_template('graph.html',ticker=app.symbol, mydata=5)#appLogic.build_graph(app.symbol))
     graph_html = build_graph(str(app.symbol))
-    return encode_utf8(html)   
+    return encode_utf8(graph_html)   
  
 
 if __name__ == '__main__':
